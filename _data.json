@@ -1,0 +1,107 @@
+{
+ "keyword": "unwrap weth",
+ "h1": "Unwrap WETH",
+ "brand": "WETH",
+ "niche": "token",
+ "verb": "Unwrap",
+ "title": "Unwrap WETH - Open App",
+ "meta_description": "unwrap weth from Wrapped Ether to ETH on Ethereum using the WETH contract; connect a wallet, confirm gas, and open the app.",
+ "palette": {
+  "mode": "dark",
+  "bg": "#0B1020",
+  "accent": "#627EEA",
+  "ink": "#FFFFFF"
+ },
+ "hero_h2": "Redeem Wrapped Ether for native ETH",
+ "hero_lead": "unwrap weth converts Wrapped Ether back into ETH through the WETH9 withdraw flow, moving an ERC-20 balance into native gas-ready ether.",
+ "badge": "ERC-20",
+ "widget": {
+  "from": "WETH",
+  "from_net": "Ethereum",
+  "to": "ETH",
+  "to_net": "Ethereum",
+  "action": "Open WrapETH App"
+ },
+ "trust": [
+  "Canonical WETH9 contract",
+  "1 WETH redeems for 1 ETH",
+  "Gas is paid in ETH"
+ ],
+ "what_is": "WETH is Wrapped Ether, an ERC-20 representation of ETH backed by ETH deposited into the WETH smart contract; <a href=\"https://ethereum.org/wrapped-eth/\">ethereum.org</a> describes redemption as receiving the same amount in ETH when WETH is burned.",
+ "how": [
+  {
+   "t": "Open the app",
+   "d": "Launch WrapETH and connect the wallet that holds WETH on the network you want to use."
+  },
+  {
+   "t": "Select the direction",
+   "d": "Choose WETH to ETH, enter the amount, and confirm that the token address matches the network."
+  },
+  {
+   "t": "Keep gas available",
+   "d": "You need native ETH in the wallet to pay the transaction fee, even when redeeming WETH."
+  },
+  {
+   "t": "Confirm withdrawal",
+   "d": "Review the wallet prompt, submit the transaction, and wait for the ETH balance to update."
+  }
+ ],
+ "points": [
+  {
+   "h": "Direct contract action",
+   "p": "Redeeming through the WETH contract calls withdraw(), so there is no swap price route or slippage; only network gas applies."
+  },
+  {
+   "h": "Verify the contract",
+   "p": "On Ethereum mainnet, the canonical WETH9 contract is <a href=\"https://etherscan.io/address/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\">0xC02a...56Cc2</a>."
+  },
+  {
+   "h": "Native ETH result",
+   "p": "After redemption, your WETH balance decreases and your ETH balance increases, making the funds usable for gas and native ETH payments."
+  }
+ ],
+ "eeat": [
+  {
+   "text": "Ethereum.org WETH guide",
+   "url": "https://ethereum.org/wrapped-eth/"
+  },
+  {
+   "text": "Etherscan WETH9 contract",
+   "url": "https://etherscan.io/address/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+  },
+  {
+   "text": "ERC-20 standard on ethereum.org",
+   "url": "https://ethereum.org/developers/docs/standards/tokens/erc-20/"
+  }
+ ],
+ "faq": [
+  {
+   "q": "How do I unwrap WETH?",
+   "a": "Open WrapETH, connect your wallet, choose WETH to ETH, enter the amount, and confirm the withdraw transaction in your wallet.",
+   "open": true
+  },
+  {
+   "q": "Does unwrap WETH use a swap?",
+   "a": "A direct WETH redemption is not a market swap. It calls the WETH9 withdraw function, burns WETH, and returns ETH, with gas as the main cost.",
+   "open": false
+  },
+  {
+   "q": "Why do I need ETH to unwrap WETH?",
+   "a": "Ethereum transaction fees are paid in native ETH, not ERC-20 WETH, so the wallet needs a small ETH balance before it can submit the transaction.",
+   "open": false
+  },
+  {
+   "q": "Can I unwrap WETH on other networks?",
+   "a": "WETH exists on multiple networks, but contract addresses differ. Use the matching network in your wallet and verify the token on that chain's explorer.",
+   "open": false
+  },
+  {
+   "q": "What is the Ethereum contract for unwrap WETH?",
+   "a": "The canonical Ethereum mainnet WETH9 contract is <a href=\"https://etherscan.io/address/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\">0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2</a>.",
+   "open": false
+  }
+ ],
+ "official_url": "https://www.wrapeth.com/",
+ "official_domain": "wrapeth.com",
+ "footer_note": "This page is not the official app; verify wrapeth.com and the contract address before connecting, educational only and not financial advice."
+}
