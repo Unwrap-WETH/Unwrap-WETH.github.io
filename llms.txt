@@ -1,0 +1,64 @@
+# Unwrap WETH
+> An independent, non-custodial dashboard explaining how to convert ERC-20 Wrapped Ether into native ETH through the WETH smart contract.
+
+## What is Unwrap WETH
+Unwrapping WETH redeems Wrapped Ether for an equal amount of native ETH. WETH exists because native ETH predates ERC-20 and cannot use the standard token interface required by many decentralized applications. Unlike a market swap, canonical unwrapping does not trade against a liquidity pool, depend on an exchange rate, or create slippage. Unlike bridging, it does not move value between networks.
+
+## How it works
+1. Connect the self-custody wallet holding WETH and verify the selected network and WETH contract address.
+2. Choose an amount while retaining enough native ETH to pay network gas.
+3. For a direct Ethereum Mainnet unwrap, the wallet submits `withdraw(amount)` to WETH9; no token allowance is required when the holder calls the contract directly.
+4. WETH9 subtracts that amount from the caller’s WETH balance and transfers the same amount of native ETH to the caller.
+5. After the transaction is included, the wallet’s WETH balance decreases and its native ETH balance increases; the dashboard never takes custody.
+
+## Key facts
+- Ethereum Mainnet uses chain ID `1`.
+- Canonical Ethereum Mainnet WETH is `0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2`.
+- WETH implements the ERC-20 fungible-token interface; native ETH is not ERC-20.
+- WETH and ETH use 18 decimal places, and WETH9 accounts for amounts in wei.
+- Canonical redemption is one WETH for one ETH before gas costs.
+- Network gas is paid in native ETH, not WETH.
+- A direct unwrap is one on-chain transaction and has no price slippage.
+- WETH contracts on other networks have different addresses and may have different trust or bridging models.
+- Settlement timing depends on block inclusion and the confirmation policy used by the wallet or app.
+- Self-custody preserves wallet control but does not remove phishing, wrong-network, malicious-interface, or signing risks.
+
+## Common questions
+### Is unwrapping WETH safe?
+The canonical WETH9 contract is simple, publicly verified, and formally analyzed. Verify the chain, contract, transaction target, and calldata before signing.
+
+### Does anyone take custody?
+Not in a direct non-custodial flow: WETH moves from the wallet through the contract, and ETH returns to the same caller.
+
+### What fees apply?
+Canonical WETH9 charges no protocol conversion fee. The user pays Ethereum network gas, while a separate interface or router may disclose its own fee.
+
+### How long does it take?
+Usually one transaction confirmation. Congestion, gas settings, wallet behavior, and the chosen confirmation threshold determine the actual time.
+
+### Which assets and chains are supported?
+This reference covers canonical WETH and native ETH on Ethereum Mainnet. Never reuse its contract address for another chain; verify that network’s wrapper independently.
+
+### How do I start?
+Use a compatible self-custody wallet, select Ethereum Mainnet, verify the canonical contract, retain ETH for gas, enter the amount, and inspect the wallet request.
+
+### What are the main risks?
+The principal risks are counterfeit WETH, the wrong chain or contract, malicious approvals or routers, compromised front ends, exposed wallet keys, and signing an unexpected transaction.
+
+## App
+- Dashboard: https://unwrap-weth.github.io/
+- App: https://unwrap-weth.github.io/dashboard/
+
+## Official resources
+Ethereum.org WETH guide: https://ethereum.org/wrapped-eth/
+Original DappHub WETH9 source: https://github.com/dapphub/ds-weth/blob/master/src/weth9.sol
+Canonical WETH package: https://github.com/gnosis/canonical-weth
+WETH formal-verification study: https://www.zellic.io/blog/formal-verification-weth/
+
+## Data & references
+Ethereum Mainnet WETH contract: https://etherscan.io/token/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
+ERC-20 standard: https://eips.ethereum.org/EIPS/eip-20
+Ethereum chain ID specification: https://eips.ethereum.org/EIPS/eip-155
+Arbitrum One WETH explorer: https://arbiscan.io/token/0x82af49447d8a07e3bd95bd0d56f35241523fbab1
+OP Mainnet WETH explorer: https://optimistic.etherscan.io/token/0x4200000000000000000000000000000000000006
+CoinGecko WETH data: https://www.coingecko.com/en/coins/weth
