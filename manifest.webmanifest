@@ -1,0 +1,19 @@
+{
+  "name": "Unwrap WETH",
+  "short_name": "Unwrap WETH",
+  "description": "How to unwrap WETH: redeem Wrapped Ether 1:1 for native ETH via the WETH9 withdraw function. Covers the contract, gas costs, DEX swaps, and safety checks.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "lang": "en",
+  "background_color": "#f5f6f8",
+  "theme_color": "#f5f6f8",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
