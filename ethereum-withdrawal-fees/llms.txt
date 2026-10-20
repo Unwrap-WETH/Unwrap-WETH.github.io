@@ -1,3 +1,0 @@
-# Ethereum Withdrawal Fees
-
-Ethereum withdrawal fees come from two sources: on-chain gas you pay to move ETH and flat fees exchanges charge to withdraw. See typical ranges, mainnet vs L2 costs, and how to pay less.

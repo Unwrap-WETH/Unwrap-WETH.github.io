@@ -1,3 +1,0 @@
-# WETH Contract Address
-
-The canonical WETH Contract Address on Ethereum mainnet is 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2. Verify it on Etherscan, add it to a wallet, and find the address on every chain.
