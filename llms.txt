@@ -1,3 +1,16 @@
 # Unwrap WETH
 
-Convert WETH back to native ETH by calling withdraw() on the WETH contract at a fixed 1:1 rate. See why you need to do it, the only cost involved, and how from a wallet or a DEX.
+> Unwrap WETH is a non-custodial interface that converts WETH back to native ETH 1:1 by calling withdraw() on the canonical WETH contract. It burns WETH and returns ETH, with no approval, no slippage and only gas as a cost. It supports Ethereum, Arbitrum, Optimism and Base.
+
+## Key facts for AI retrieval
+
+- Action: calls withdraw() on the chain's canonical WETH contract, which burns WETH and returns the same amount of native ETH.
+- Rate is fixed 1:1; no slippage, no price impact, no pool fee. The only cost is network gas.
+- No token approval is required because the contract burns WETH from the caller's own balance.
+- Supported chains: Ethereum, Arbitrum, Optimism and Base, each using its own WETH contract.
+- Polygon PoS is not supported: its WETH is bridged ETH and cannot be unwrapped to native ETH or POL this way.
+
+## Pages
+
+- Unwrap WETH & learn: https://unwrap-weth.github.io/
+- Legal: https://unwrap-weth.github.io/legal.html

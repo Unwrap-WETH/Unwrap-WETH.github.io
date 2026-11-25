@@ -1,241 +1,301 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Unwrap WETH — Convert Wrapped ETH Back to Native ETH</title>
-<meta name="description" content="Convert WETH back to native ETH by calling withdraw() on the WETH contract at a fixed 1:1 rate. See why you need to do it, the only cost involved, and how from a wallet or a DEX.">
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unwrap WETH — convert WETH to native ETH 1:1</title>
+<meta name="description" content="Unwrap WETH to native ETH 1:1 with withdraw() on the canonical WETH contract. Non-custodial, no approval, no slippage, gas only. Ethereum, Arbitrum, OP, Base.">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#f4f5f7">
 <link rel="canonical" href="https://unwrap-weth.github.io/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Unwrap WETH">
-<meta property="og:url" content="https://unwrap-weth.github.io/">
-<meta property="og:image" content="https://unwrap-weth.github.io/og.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Unwrap WETH">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Figtree:wght@500;600;700&display=swap">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://unwrap-weth.github.io/#website", "url": "https://unwrap-weth.github.io/", "name": "Unwrap WETH — Convert Wrapped ETH Back to Native ETH"}, {"@type": "WebPage", "@id": "https://unwrap-weth.github.io/#webpage", "url": "https://unwrap-weth.github.io/", "name": "Unwrap WETH — Convert Wrapped ETH Back to Native ETH", "isPartOf": {"@id": "https://unwrap-weth.github.io/#website"}, "description": "Convert WETH back to native ETH by calling withdraw() on the WETH contract at a fixed 1:1 rate. See why you need to do it, the only cost involved, and how from a wallet or a DEX.", "datePublished": "2026-11-08", "dateModified": "2026-11-08"}, {"@type": "SoftwareApplication", "name": "Unwrap WETH", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://unwrap-weth.github.io/"}, {"@type": "ListItem", "position": 2, "name": "Wrapping"}, {"@type": "ListItem", "position": 3, "name": "Unwrap WETH"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What does it mean to unwrap WETH?", "acceptedAnswer": {"@type": "Answer", "text": "Unwrapping WETH means calling the withdraw() function on the WETH smart contract, which burns your WETH balance and sends you the same amount of native ETH at a fixed 1:1 rate."}}, {"@type": "Question", "name": "Why would I need to unwrap WETH?", "acceptedAnswer": {"@type": "Answer", "text": "This is needed whenever you want native ETH instead of its token form — most often to pay gas, since transaction fees on Ethereum are only ever paid in ETH, or because an app specifically requires the native asset rather than an ERC-20."}}, {"@type": "Question", "name": "Does unwrapping WETH cost anything besides gas?", "acceptedAnswer": {"@type": "Answer", "text": "No. The WETH contract redeems your tokens against its own ETH reserve at an unconditional 1:1 rate, so there is no protocol fee and no slippage — the Ethereum gas for the transaction is the only cost."}}, {"@type": "Question", "name": "Can I unwrap WETH in my wallet, or do I need a DEX?", "acceptedAnswer": {"@type": "Answer", "text": "Either works. Many wallets show an unwrap or convert action directly on the WETH balance, and DEX interfaces such as Uniswap also recognize a WETH-to-ETH conversion and call withdraw() directly instead of routing it through a trading pool."}}, {"@type": "Question", "name": "What happens to leftover WETH after a swap?", "acceptedAnswer": {"@type": "Answer", "text": "It stays in your wallet as WETH until you unwrap it. A common pitfall is assuming that balance is spendable ETH when an app actually needs the native asset, which causes the transaction to fail until you unwrap first."}}, {"@type": "Question", "name": "Do some protocols unwrap WETH automatically?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. A trade that ends in ETH, a native-ETH loan repayment, or a liquidity exit that returns ETH often bundles the unwrap step into one transaction, so you never call withdraw() separately and pay no extra gas for it."}}, {"@type": "Question", "name": "Can I wrap the ETH again after unwrapping?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Wrapping and unwrapping are fully symmetric and can be repeated as often as you like; each direction only costs the Ethereum gas for that single transaction."}}]}]}</script>
+<meta property="og:type" content="website"><meta property="og:site_name" content="Unwrap WETH"><meta property="og:title" content="Unwrap WETH — convert WETH to native ETH 1:1"><meta property="og:description" content="Unwrap WETH to native ETH 1:1 with withdraw() on the canonical WETH contract. Non-custodial, no approval, no slippage, gas only. Ethereum, Arbitrum, OP, Base."><meta property="og:url" content="https://unwrap-weth.github.io/"><meta property="og:image" content="https://unwrap-weth.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Unwrap WETH — convert WETH to native ETH 1:1"><meta name="twitter:description" content="Unwrap WETH to native ETH 1:1 with withdraw() on the canonical WETH contract. Non-custodial, no approval, no slippage, gas only. Ethereum, Arbitrum, OP, Base."><meta name="twitter:image" content="https://unwrap-weth.github.io/og-image.png">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="manifest" href="manifest.webmanifest">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://unwrap-weth.github.io/#organization","name":"Unwrap WETH","url":"https://unwrap-weth.github.io/","description":"Unwrap WETH to native ETH 1:1 with withdraw() on the canonical WETH contract. Non-custodial, no approval, no slippage, gas only. Ethereum, Arbitrum, OP, Base.","logo":{"@type":"ImageObject","@id":"https://unwrap-weth.github.io/#logo","url":"https://unwrap-weth.github.io/icon.svg","caption":"Unwrap WETH"}},{"@type":"WebSite","@id":"https://unwrap-weth.github.io/#website","url":"https://unwrap-weth.github.io/","publisher":{"@id":"https://unwrap-weth.github.io/#organization"},"name":"Unwrap WETH"},{"@type":"WebPage","@id":"https://unwrap-weth.github.io/#webpage","url":"https://unwrap-weth.github.io/","publisher":{"@id":"https://unwrap-weth.github.io/#organization"},"name":"Unwrap WETH — convert WETH to native ETH 1:1","isPartOf":{"@id":"https://unwrap-weth.github.io/#website"},"mainEntity":{"@id":"https://unwrap-weth.github.io/#app"},"breadcrumb":{"@id":"https://unwrap-weth.github.io/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://unwrap-weth.github.io/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://unwrap-weth.github.io/"},{"@type":"ListItem","position":2,"name":"Unwrap WETH","item":"https://unwrap-weth.github.io/"}]},{"@type":"WebApplication","@id":"https://unwrap-weth.github.io/#app","url":"https://unwrap-weth.github.io/","publisher":{"@id":"https://unwrap-weth.github.io/#organization"},"name":"Unwrap WETH","applicationCategory":"FinanceApplication","operatingSystem":"Web","description":"Unwrap WETH to native ETH 1:1 with withdraw() on the canonical WETH contract. Non-custodial, no approval, no slippage, gas only. Ethereum, Arbitrum, OP, Base.","isPartOf":{"@id":"https://unwrap-weth.github.io/#website"}},{"@type":"FAQPage","@id":"https://unwrap-weth.github.io/#faq","isPartOf":{"@id":"https://unwrap-weth.github.io/#webpage"},"about":{"@id":"https://unwrap-weth.github.io/#app"},"name":"Unwrap WETH FAQ","mainEntity":[{"@type":"Question","name":"How do I unwrap WETH to ETH?","acceptedAnswer":{"@type":"Answer","text":"Connect your wallet, pick the network, enter an amount and sign a call to withdraw() on that chain\u0027s WETH contract. The contract burns your WETH and sends back the same amount of native ETH."}},{"@type":"Question","name":"Is unwrapping WETH always 1:1?","acceptedAnswer":{"@type":"Answer","text":"Yes. The WETH contract returns exactly the amount of ETH that corresponds to the WETH it burns. You only lose the gas fee for the transaction."}},{"@type":"Question","name":"Do I need to approve WETH before unwrapping?","acceptedAnswer":{"@type":"Answer","text":"No. withdraw() burns WETH from the caller\u0027s own balance, so no allowance is needed. That is one fewer transaction than a DEX sale, which usually requires an approval first."}},{"@type":"Question","name":"Which networks can I unwrap WETH on?","acceptedAnswer":{"@type":"Answer","text":"Ethereum, Arbitrum, Optimism and Base, each using its own canonical WETH contract. Make sure your wallet is on the network that holds your WETH."}},{"@type":"Question","name":"Can I unwrap WETH on Polygon PoS?","acceptedAnswer":{"@type":"Answer","text":"Not with this method. The WETH on Polygon PoS is bridged ETH, not a wrapper with a withdraw() that returns native ETH or POL. To get ETH you would bridge it back to Ethereum."}},{"@type":"Question","name":"Is it cheaper to unwrap WETH or sell it on a DEX?","acceptedAnswer":{"@type":"Answer","text":"Unwrapping, in most cases. It costs gas only, while a DEX sale adds gas for a possible approval, a pool or aggregator fee, and slippage. Both can end with ETH in your wallet, but only unwrapping is a fixed 1:1 exchange."}}]}]}
+</script>
 <style>
-:root{--bg:#F7FAF9;--surface:#FFFFFF;--text:#0E1915;--muted:#52655D;--accent:#0E7490;--accent-ink:#FFFFFF;--radius:15px;--display:"Figtree";--body:"Inter"}
+@font-face{font-family:'Inter';src:url('assets/inter.woff2') format('woff2');font-weight:400 700;font-display:swap}
+@font-face{font-family:'Space Grotesk';src:url('assets/space-grotesk.woff2') format('woff2');font-weight:500 700;font-display:swap}
+:root{
+ --bg:#f4f5f7;--card:#fff;--ink:#131820;--muted:#737b88;--faint:#aeb4bf;
+ --line:#e9ebef;--line-2:#dee1e7;--panel:#f6f7f9;--panel-2:#eceef1;
+ --accent:#4b5a73;--accent-hover:#3e4b61;--accent-ink:#3c4a63;--accent-soft:#e6eaf0;--accent-on:#ffffff;--promo:#edf0f4;--text-2:#4b5563;
+ --shadow:0 1px 2px rgba(13,17,28,.04),0 24px 56px -40px rgba(13,17,28,.24);--pico-bg:#fff;--pico-ring:rgba(13,17,28,.06);
+ --ease:cubic-bezier(.2,.7,.2,1);
+ --head:"Space Grotesk","Arial",sans-serif;--body:"Inter","Arial",sans-serif;color-scheme:light}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:2rem}
-body{margin:0;background:var(--bg);color:var(--text);font:400 1rem/1.65 var(--body);-webkit-font-smoothing:antialiased}
-::selection{background:var(--accent);color:var(--accent-ink)}
-a{color:inherit;text-underline-offset:.25em}
-a:hover{color:var(--accent)}
-button,input,select,textarea{font:inherit}
-input,select{color:var(--text);accent-color:var(--accent)}
-:focus-visible{outline:3px solid var(--accent);outline-offset:5px}
-img,svg{max-width:100%;vertical-align:middle}
-svg{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.ca9c7ec{width:min(1200px,calc(100% - 4rem));margin-inline:auto}
-.cd71c81{min-height:92px;display:flex;align-items:center;justify-content:space-between;gap:2rem;border-bottom:1px solid color-mix(in srgb,var(--text) 12%,transparent)}
-.ce4c8f2{display:inline-flex;align-items:center;gap:.7rem;text-decoration:none;font:650 1.3rem/1.2 var(--display);letter-spacing:-.04em}
-.ce93d65{display:grid;place-items:center;width:36px;height:36px;background:var(--accent);color:var(--accent-ink);border-radius:calc(var(--radius)*.5)}
-.ce93d65 svg{width:23px;height:23px}
-.c43fd06{display:flex;align-items:center;gap:1.8rem;font-size:.875rem;font-weight:550}
-.c43fd06 a{text-decoration:none}
-.c43fd06 .c44bcf6{padding:.6rem 1rem;border:1px solid color-mix(in srgb,var(--text) 18%,transparent);border-radius:var(--radius)}
-.c668d32{padding-block:1.5rem;font-size:.8rem;color:var(--muted);overflow-wrap:anywhere}
-.c5a7f81{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem;margin:0;padding:0;list-style:none}
-.c5a7f81 a{text-decoration:none}
-.c5a7f81 [aria-current="page"]{color:var(--text)}
-.cb8be3f{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:start;gap:clamp(1.75rem,5vw,4rem);padding-block:2rem 3.5rem}
-.c127899{min-width:0}
-.cb4f504{display:inline-flex;align-items:center;gap:.55rem;margin:0 0 1.25rem;color:var(--muted);font-size:.875rem}
-.cb4f504::before{content:"";width:.5rem;height:.5rem;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 12%,transparent)}
-h1{margin:0;font:550 clamp(2.65rem,5vw,4.75rem)/1.06 var(--display);letter-spacing:-.055em;overflow-wrap:anywhere;text-wrap:balance}
-h1 em{color:var(--accent);font-style:normal}
-.c8b00e2{max-width:36rem;margin:1.6rem 0 2rem;color:var(--muted);font-size:1.1rem;line-height:1.8}
-.c70a07a{display:inline-flex;justify-content:center;align-items:center;gap:1.4rem;min-height:54px;padding:.9rem 1.4rem;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 86%,var(--text)));color:var(--accent-ink);border:1px solid color-mix(in srgb,var(--accent-ink) 12%,transparent);border-radius:var(--radius);font-weight:650;text-decoration:none;box-shadow:0 8px 22px color-mix(in srgb,var(--accent) 20%,transparent);transition:transform .2s,box-shadow .2s}
-.c70a07a svg{width:20px;height:20px;flex:none}
-.c70a07a:hover{color:var(--accent-ink);transform:translateY(-2px);box-shadow:0 12px 26px color-mix(in srgb,var(--accent) 28%,transparent)}
-.c234d40{display:flex;align-items:center;gap:.5rem;margin:1.2rem 0 0;color:var(--muted);font-size:.8rem}
-.c234d40 svg{width:16px;height:16px;color:var(--accent)}
-.c05d4eb{position:relative;min-width:0;padding:12px;border:1px solid color-mix(in srgb,var(--accent) 18%,transparent);border-radius:calc(var(--radius) + 12px);background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 13%,var(--bg)),color-mix(in srgb,var(--surface) 70%,var(--bg)));box-shadow:0 28px 64px -28px color-mix(in srgb,var(--text) 24%,transparent)}
-.c3c401b{padding:clamp(1.25rem,3vw,2rem);background:var(--surface);border:1px solid color-mix(in srgb,var(--text) 9%,transparent);border-radius:var(--radius)}
-.ca6ae42{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.7rem}
-.ca6ae42 h2{margin:0;font:600 1.2rem/1.3 var(--display);letter-spacing:-.025em}
-.ceb4f3e{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);font-size:.72rem;white-space:nowrap}
-.ceb4f3e::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
-.c6d075b{display:grid;grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr);align-items:center;gap:.7rem;margin-bottom:1.7rem}
-.cc361de{min-width:0;padding:.9rem 1rem;background:color-mix(in srgb,var(--bg) 70%,var(--surface));border:1px solid color-mix(in srgb,var(--text) 9%,transparent);border-radius:calc(var(--radius)*.7)}
-.c1b9d30{display:block;margin-bottom:.65rem;color:var(--muted);font-size:.75rem}
-.c57c231{display:flex;align-items:center;gap:.5rem;min-height:32px;font:600 .95rem/1.3 var(--display);overflow-wrap:anywhere}
-.c57c231 img,.c57c231 svg{width:auto;height:32px;max-width:100%;object-fit:contain}
-.c745c85{display:grid;place-items:center;width:36px;height:36px;border:1px solid color-mix(in srgb,var(--accent) 24%,transparent);border-radius:50%;color:var(--accent)}
-.c745c85 svg{width:18px;height:18px}
-.ce26c10{display:block;margin-bottom:.55rem;font-size:.8rem;font-weight:550}
-.c3defee{display:flex;align-items:center;gap:.5rem;padding:.7rem 1rem;border:1px solid color-mix(in srgb,var(--text) 19%,transparent);border-radius:calc(var(--radius)*.7);background:var(--bg);transition:border-color .2s}
-.c3defee:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 13%,transparent)}
-.c3defee input{width:100%;min-width:0;padding:0;border:0;border-radius:0;background:var(--bg);font:550 1.9rem/1.5 var(--display);font-variant-numeric:tabular-nums}
-.c3defee input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.c3defee span{color:var(--muted);font-size:.8rem}
-.ce2cd1a{margin:.5rem 0 1.2rem;color:var(--muted);font-size:.73rem}
-.cef144a{margin:-.65rem 0 1rem;color:var(--text);font-size:.8rem}
-.c5e0eca{padding:1.2rem;border:1px solid color-mix(in srgb,var(--accent) 18%,transparent);border-radius:calc(var(--radius)*.7);background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 8%,var(--surface)),var(--surface))}
-.ce41c72{display:block;color:var(--muted);font-size:.8rem}
-.c86cac2{display:block;margin:.35rem 0 1.2rem;font:600 clamp(1.65rem,3vw,2.25rem)/1.25 var(--display);letter-spacing:-.035em;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
-.c86cac2 small{color:var(--muted);font:400 .8rem/1.5 var(--body);letter-spacing:0}
-.cbe0ac4{display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding-top:1rem;border-top:1px solid color-mix(in srgb,var(--text) 10%,transparent)}
-.c9c00af{display:block;color:var(--muted);font-size:.72rem}
-.c0858e3{display:block;margin-top:.2rem;font-size:.9rem;font-weight:600;font-variant-numeric:tabular-nums}
-.c3c401b .c70a07a{width:100%;margin-top:1.3rem;justify-content:space-between}
-.cb6120a{margin-top:1rem;color:var(--muted);font-size:.73rem}
-.cb6120a summary{cursor:pointer;width:fit-content;text-underline-offset:.2em}
-.cb6120a summary:hover{color:var(--text)}
-.cb6120a p{margin:.7rem 0 0}
-.c1d219a{margin:0;font:550 1.75rem/1.2 var(--display);letter-spacing:-.035em}
-.cf0ee18{padding:2rem 2.25rem;background:var(--surface);border:1px solid color-mix(in srgb,var(--text) 10%,transparent);border-radius:var(--radius)}
-.cf0ee18 .c1d219a{margin-bottom:1.5rem}
-.c394406{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain}
-.c7af066{width:100%;border-collapse:collapse;text-align:left;font-size:.9rem}
-.c7af066 caption{text-align:left;margin-bottom:1rem;color:var(--muted)}
-.c7af066 th,.c7af066 td{padding:1rem 1.1rem;border-bottom:1px solid color-mix(in srgb,var(--text) 10%,transparent);vertical-align:top;overflow-wrap:anywhere}
-.c7af066 th{color:var(--muted);font-weight:500}
-.c7af066 thead{background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
-.c7af066 thead th{color:var(--text);font-weight:600}
-.c7af066 tbody tr:last-child>*{border-bottom:0}
-.c7af066 tbody tr:hover{background:color-mix(in srgb,var(--accent) 4%,var(--surface))}
-.cbd42a1{max-width:820px;margin:4.5rem auto}
-.c591c50{margin:0 0 3.5rem;scroll-margin-top:2rem}
-.c6859f4{margin:0 0 1.25rem;font:550 clamp(1.65rem,3vw,2.25rem)/1.2 var(--display);letter-spacing:-.035em;text-wrap:balance}
-.c15710e{color:var(--muted);font-size:1.025rem;line-height:1.9;overflow-wrap:anywhere}
-.c15710e p{margin:0 0 1.25rem}
-.c15710e h3{margin:1.75rem 0 .75rem;color:var(--text);font:600 1.25rem/1.35 var(--display);letter-spacing:-.02em}
-.c15710e strong{color:var(--text);font-weight:600}
-.c15710e a,.c837223 a,.c329079 a{color:var(--accent);text-decoration-thickness:1px}
-.c15710e ul,.c15710e ol,.c837223 ul,.c837223 ol{padding-left:1.4rem}
-.c15710e li+li{margin-top:.55rem}
-.c15710e li::marker{color:var(--accent)}
-.c15710e blockquote{margin:1.5rem 0;padding:1rem 1.5rem;border-left:3px solid var(--accent);background:var(--surface);border-radius:0 var(--radius) var(--radius) 0;color:var(--text)}
-.c15710e img{height:auto;border-radius:var(--radius)}
-.c15710e table{width:100%;border-collapse:collapse}
-.c15710e td,.c15710e th{padding:.75rem;border-bottom:1px solid color-mix(in srgb,var(--text) 12%,transparent);text-align:left}
-.cb2c526{margin:.8rem 0;padding:0 1.4rem;border:1px solid color-mix(in srgb,var(--text) 12%,transparent);border-radius:var(--radius);background:var(--surface)}
-.c73d19d{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;min-height:72px;padding:1.2rem 0;cursor:pointer;list-style:none;font:550 1.05rem/1.5 var(--display)}
-.c73d19d::-webkit-details-marker{display:none}
-.c73d19d::after{content:"+";flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:color-mix(in srgb,var(--accent) 10%,var(--surface));color:var(--accent);font:400 1.25rem/1 var(--body)}
-.cb2c526[open]{border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
-.cb2c526[open]>.c73d19d::after{content:"−"}
-.c837223{padding:0 2.8rem 1.3rem 0;color:var(--muted);line-height:1.85;overflow-wrap:anywhere}
-.c837223 p{margin:.25rem 0 .75rem}
-.cde4580{display:grid;grid-template-columns:1fr 2fr;gap:2rem;padding:2.5rem 0;border-top:1px solid color-mix(in srgb,var(--text) 12%,transparent)}
-.c11967e{margin:0;padding:0;list-style:none}
-.c329079{padding:.7rem 0;border-bottom:1px solid color-mix(in srgb,var(--text) 8%,transparent);color:var(--muted);font-size:.875rem;overflow-wrap:anywhere}
-.c329079:first-child{padding-top:0}
-.c329079:last-child{border-bottom:0}
-.c87d44a{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;padding-block:1.75rem 2.5rem;border-top:1px solid color-mix(in srgb,var(--text) 12%,transparent);color:var(--muted);font-size:.8rem}
-.ccaaa2d{color:var(--text);font:600 1rem/1.3 var(--display);letter-spacing:-.025em}
-.c55e093{margin:0}
-@media(min-width:1100px){.c05d4eb{transform:rotate(1deg)}.c3c401b{transform:rotate(-1deg)}}
-@media(max-width:850px){.cb8be3f{grid-template-columns:1fr;gap:2.5rem;padding-block:1.5rem 3.5rem}.c127899{max-width:650px}.c05d4eb{width:100%;max-width:580px;justify-self:center}.cbd42a1{margin-block:3.5rem}.c43fd06{gap:1rem}h1{max-width:14ch}}
-@media(max-width:540px){.ca9c7ec{width:calc(100% - 2rem)}.cd71c81{min-height:76px;gap:1rem}.c43fd06>a:not(.c44bcf6){display:none}.c43fd06 .c44bcf6{padding:.5rem .8rem}.c668d32{padding-block:1.1rem}.cb8be3f{padding-top:1rem}.c127899>.c70a07a{width:100%;justify-content:space-between}.c8b00e2{font-size:1rem}.c05d4eb{padding:7px;border-radius:calc(var(--radius) + 7px)}.c3c401b{padding:1.1rem}.c6d075b{gap:.4rem;grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr)}.c745c85{width:30px;height:30px}.cc361de{padding:.8rem}.cf0ee18{padding:1.4rem 1rem}.c7af066 th,.c7af066 td{padding:.85rem .65rem}.cb2c526{padding-inline:1rem}.c837223{padding-right:0}.cde4580{grid-template-columns:1fr;gap:1.4rem}.c87d44a{align-items:flex-start;flex-direction:column;gap:.65rem}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}.c70a07a:hover{transform:none}}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;color:var(--ink);font:15px/1.6 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden;background:var(--bg)}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:none;-webkit-mask-image:linear-gradient(#000 0,rgba(0,0,0,.35) 60%,transparent 100%);mask-image:linear-gradient(#000 0,rgba(0,0,0,.35) 60%,transparent 100%)}
+a{color:inherit;text-decoration:none}button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit}
+img{display:block;max-width:100%}
+h1,h2,h3{margin:0;font-family:var(--head);font-weight:500;letter-spacing:-.01em}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+
+.nav{display:flex;align-items:center;gap:24px;padding:16px 24px;max-width:1280px;margin:0 auto;width:100%}
+.brand{display:inline-flex;align-items:center;gap:8px;font-family:var(--head);font-weight:500;font-size:20px;letter-spacing:-.02em;color:var(--ink);white-space:nowrap;flex:0 0 auto}
+.brand img{width:28px;height:28px}
+.nlinks{display:flex;align-items:center;gap:20px}
+.nlinks a{font-size:14px;font-weight:500;color:var(--muted);white-space:nowrap;transition:color .16s var(--ease)}
+.nlinks a:hover{color:var(--ink)}
+.spacer{flex:1}
+main{flex:1}
+.chain{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:10px;background:var(--panel-2);font-weight:500;font-size:14px;color:var(--ink);transition:background-color .16s var(--ease);flex:0 0 auto;white-space:nowrap}
+.chain img{width:20px;height:20px;border-radius:50%}
+.chain:hover{background:var(--line-2)}
+.chain .cv{width:12px;height:12px;color:var(--muted)}
+.connect{display:inline-flex;align-items:center;height:40px;padding:0 16px;border-radius:10px;background:var(--card);border:1px solid var(--line-2);color:var(--ink);font-weight:500;font-size:14px;transition:background-color .16s var(--ease),border-color .16s var(--ease);flex:0 0 auto;white-space:nowrap}
+.connect:hover{border-color:var(--faint);background:var(--panel)}
+
+.hero{display:flex;flex-direction:column;align-items:center;padding:32px 20px 48px}
+h1{font-size:clamp(36px,4.6vw,48px);line-height:1.08;letter-spacing:-.025em;text-align:center;color:var(--ink);margin:0 0 32px}
+
+.card{width:min(600px,100%);background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+.tabs{display:flex;align-items:center;gap:4px;padding:20px 20px 16px}
+.tab{display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:10px;font-weight:500;font-size:14px;color:var(--muted);transition:background-color .16s var(--ease),color .16s var(--ease)}
+.tab:hover{background:var(--panel-2);color:var(--ink)}
+.tab.on{background:var(--accent-soft);color:var(--accent-ink)}
+.tabs .sp{flex:1}
+.tabs .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--muted);transition:background-color .16s var(--ease),color .16s var(--ease)}
+.tabs .ic:hover{background:var(--panel-2);color:var(--ink)}
+.tabs .ic svg{width:18px;height:18px}
+
+.promo{margin:0 20px;padding:32px;border-radius:12px;background:var(--promo);display:flex;align-items:center;gap:20px}
+.promo-txt{flex:1;min-width:0}
+.promo-h{font-family:var(--head);font-weight:500;font-size:clamp(22px,3.4vw,28px);line-height:1.2;letter-spacing:-.015em;color:var(--ink);margin:0 0 8px;text-wrap:balance}
+.promo-sub{font-size:15px;line-height:1.6;color:var(--text-2);margin:0;max-width:34ch}
+.promo-grid{flex:0 0 auto;display:grid;grid-template-columns:repeat(2,auto);gap:16px}
+.pico{width:52px;height:52px;border-radius:50%;background:var(--pico-bg);box-shadow:0 0 0 1px var(--pico-ring);display:grid;place-items:center;overflow:hidden}
+.pico img{width:100%;height:100%;object-fit:contain;display:block}
+.promo-flow{flex-direction:column;align-items:stretch;gap:24px}
+.promo-flow .promo-sub{max-width:44ch}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.flow li{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px}
+.flow li+li::before{content:"";position:absolute;top:22px;right:calc(50% + 30px);width:calc(100% - 52px);height:1px;background:var(--line-2)}
+.fi{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;overflow:hidden;background:var(--pico-bg);box-shadow:0 0 0 1px var(--pico-ring);color:var(--accent-ink)}
+.fi img{width:100%;height:100%;display:block}
+.fi svg{width:20px;height:20px}
+.fi.on{background:var(--accent);color:var(--accent-on);box-shadow:none}
+.flow b{margin-top:4px;font-weight:500;font-size:14px;color:var(--ink)}
+.flow small{font-size:13px;line-height:1.4;color:var(--muted)}
+.cta-wrap{padding:20px}
+.cta{width:100%;height:60px;border-radius:12px;background:var(--accent);color:var(--accent-on);font-weight:500;font-size:16px;transition:background-color .16s var(--ease),transform .12s var(--ease)}
+.cta:hover{background:var(--accent-hover)}
+.cta:active{transform:scale(.99)}
+@media(max-width:470px){.promo{flex-direction:column;align-items:flex-start}.promo-grid{grid-template-columns:repeat(4,auto)}.promo-sub{max-width:none}}
+
+.learn{max-width:720px;margin:48px auto 0;width:100%;padding:0 24px 72px}
+.learn-h{font-size:14px;font-weight:500;color:var(--muted);text-align:center;margin:0 0 12px}
+.lrow{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:flex-start}
+.lcard{flex:0 0 auto;background:transparent;border:1px solid var(--line-2);border-radius:10px;transition:background-color .16s var(--ease),border-color .16s var(--ease)}
+.lcard>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;font-weight:500;font-size:14px;color:var(--text-2)}
+.lcard>summary::-webkit-details-marker{display:none}
+.lcard:hover{border-color:var(--faint);background:var(--card)}.lcard:hover>summary{color:var(--ink)}
+.lcard .chev{width:6px;height:6px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:rotate(45deg);margin-top:-4px;flex-shrink:0;transition:transform .16s var(--ease)}
+.lcard[open]{order:9;flex:0 0 100%;min-width:0;background:var(--card);border-color:var(--line-2);border-radius:16px;margin-top:8px}
+.lcard[open]>summary{height:auto;padding:20px 24px 0;color:var(--muted);font-size:13px}
+.lcard[open] .chev{transform:rotate(225deg);margin-top:4px}
+.lbody{padding:4px 24px 24px;max-width:660px}
+.lbody h2{font-size:22px;line-height:1.3;color:var(--ink);margin:8px 0 4px}
+.lbody h3{font-size:15px;line-height:1.4;color:var(--ink);margin:20px 0 4px}
+.lbody p{margin:0;font-size:15px;line-height:1.7;color:var(--text-2)}
+.lbody p+p{margin-top:8px}
+.lbody ul,.lbody ol{margin:8px 0 0;padding-left:20px}
+.lbody li{font-size:15px;line-height:1.7;color:var(--text-2);margin-bottom:4px}
+.lbody a{color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
+.lbody strong,.lbody b{color:var(--ink);font-weight:500}
+.lbody .tbl{overflow-x:auto;margin:16px 0 4px}
+.lbody table{width:100%;min-width:420px;border-collapse:collapse;font-size:14px}
+.lbody caption{text-align:left;color:var(--muted);font-size:13px;margin-bottom:8px}
+.lbody th,.lbody td{text-align:left;padding:8px 12px;border:1px solid var(--line-2);vertical-align:top;line-height:1.45}
+.lbody thead th{background:var(--panel);color:var(--ink);font-weight:500}
+.lbody tbody th{background:var(--panel);color:var(--muted);white-space:nowrap;font-weight:500}
+.lbody td{color:var(--text-2)}
+.lfaq h3{margin-top:16px;font-size:16px}
+
+footer{border-top:1px solid var(--line-2);background:var(--card)}
+.foot{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:20px 24px 24px;color:var(--muted);font-size:13px}
+.foot a{color:var(--muted);transition:color .16s var(--ease)}.foot a:hover{color:var(--ink)}.foot .sep{color:var(--faint)}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,8px);background:var(--ink);color:var(--bg);border-radius:12px;padding:12px 16px;font-size:13px;box-shadow:0 16px 40px -16px rgba(13,17,28,.5);z-index:60;opacity:0;visibility:hidden;transition:opacity .2s var(--ease),transform .2s var(--ease),visibility .2s;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+
+@media(max-width:1120px){.nlinks{display:none}}
+@media(max-width:720px){.chain span{display:none}.chain{padding:0 8px;gap:4px}}
+@media(max-width:560px){
+  .nav{padding:12px 16px;gap:8px}
+  .brand{font-size:16px}
+  .brand img{width:24px;height:24px}
+  .chain{height:36px;padding:0 8px;gap:4px}
+  .chain span{display:none}
+  .connect{height:36px;padding:0 12px;font-size:13px}
+  .hero{padding:24px 16px 40px}
+  .tabs{padding:16px 16px 12px}.promo{margin:0 16px;padding:24px}.cta-wrap{padding:16px}.cta{height:56px}
+  .learn{margin-top:40px;padding:0 16px 56px}
+}
 </style>
+<link rel="prerender" href="/dashboard/">
+<link rel="prefetch" href="/dashboard/" as="document">
+<link rel="preload" href="/dashboard/" as="document">
 </head>
 <body>
-<div class="ca9c7ec">
-<nav class="cd71c81" aria-label="Main navigation">
-<a class="ce4c8f2" href="#hero"><span class="ce93d65" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h15m-4-4 4 4-4 4M20 16H5m4-4-4 4 4 4"/></svg></span>Compare</a>
-<div class="c43fd06"><a href="#facts">Key facts</a><a href="#guide">Guide</a><a href="#sources">Sources</a><a class="c44bcf6" href="dashboard/">Swap ↗</a></div>
-</nav>
-<div class="c668d32"><nav class="c5a7f81" aria-label="Breadcrumb"><a href="dashboard/">Home</a> <span>/</span> <span>Wrapping</span> <span>/</span> <span>Unwrap WETH</span></nav></div>
-<section class="cb8be3f" id="hero" aria-labelledby="hero-title">
-<div class="c127899">
-<p class="cb4f504">Wrap & unwrap</p>
-<h1 id="hero-title"><em>Unwrap WETH</em>.</h1>
-<p class="c8b00e2">To <strong>Unwrap WETH</strong> is to convert your Wrapped Ether back into native ETH by calling the withdraw() function on the WETH smart contract, which burns the WETH you hold and releases the same amount of ETH to your address. The rate never moves from 1:1, there is no protocol fee, and the only cost is the Ethereum gas for the transaction itself. People do this when they need native ETH to pay gas or to use an app that will not accept an ERC-20 standing in for it, whether that is done from a wallet's own token screen or a DEX interface.</p>
-<a class="c70a07a" href="dashboard/">Swap <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
-<p class="c234d40"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Explore fees and timing below</p>
-</div>
-<aside class="c05d4eb" aria-labelledby="estimator-title">
-<div class="c3c401b">
-<div class="ca6ae42"><h2 id="estimator-title">Wrap estimator</h2><span class="ceb4f3e">Auto-updating</span></div>
-<div class="c6d075b">
-<div class="cc361de"><span class="c1b9d30">From</span><div class="c57c231"><img src="assets/tokens/eth.svg" alt="Ethereum" width="28" height="28"></div></div>
-<span class="c745c85" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span>
-<div class="cc361de"><span class="c1b9d30">To</span><div class="c57c231"></div></div>
-</div>
-<label class="ce26c10" for="amount">Amount</label>
-<div class="c3defee"><input id="amount" type="number" inputmode="decimal" min="1" max="1000000000" step="0.01" value="1000" aria-describedby="amount-hint amount-error"><span>units</span></div>
-<p class="ce2cd1a" id="amount-hint">Enter 1–1,000,000,000 units, up to 2 decimal places.</p>
-<p class="cef144a" id="amount-error" hidden></p>
-<div class="c5e0eca" role="status" aria-live="polite" aria-atomic="true">
-<span class="ce41c72">Estimated amount received</span>
-<output class="c86cac2" id="received" for="amount">—</output>
-<div class="cbe0ac4">
-<div><span class="c9c00af">Estimated fee</span><output class="c0858e3" id="fee" for="amount">—</output></div>
-<div><span class="c9c00af">Estimated time</span><output class="c0858e3" id="time" for="amount">—</output></div>
-</div>
-</div>
-<a class="c70a07a" href="dashboard/">Swap <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
-<details class="cb6120a"><summary>How the estimate is calculated</summary><p>Fee = 0.5 units + 0.35% of the amount, rounded to 2 decimals. Amount received = amount − fee. Time = 2 minutes + 1 minute per 10,000 units, rounded up.</p></details>
-<noscript><p class="ce2cd1a">Enable JavaScript to calculate fees and timing.</p></noscript>
-</div>
-</aside>
-</section>
-<section class="cf0ee18" id="facts" aria-labelledby="facts-title"><h2 class="c1d219a" id="facts-title">Key facts</h2><div class="c394406" role="region" aria-label="Key facts table" tabindex="0"><table class="c7af066"><tbody><tr><th scope="row">Action</th><td>Calls withdraw() on the WETH contract</td></tr>
-<tr><th scope="row">Exchange rate</th><td>Fixed 1:1 — no slippage, no market</td></tr>
-<tr><th scope="row">Cost</th><td>Ethereum gas only, no protocol fee</td></tr>
-<tr><th scope="row">Result</th><td>Native ETH, spendable immediately</td></tr>
-<tr><th scope="row">Reversible</th><td>Yes — wrap the ETH again anytime</td></tr>
-<tr><th scope="row">Common trigger</th><td>Needing ETH for gas or a native-only app</td></tr></tbody></table></div></section>
-<main class="cbd42a1" id="guide"><section class="c591c50"><h2 class="c6859f4">What It Means to Unwrap WETH</h2><div class="c15710e"><strong>Unwrapping WETH means converting Wrapped Ether back into native ETH by calling the withdraw() function on the WETH smart contract, which burns your WETH balance and sends you the same amount of ETH.</strong> WETH exists because the ERC-20 standard needs a token interface that native ETH does not have, and wrapping turns ETH into that token form. Unwrapping reverses the process: the contract burns the WETH you hold and releases ETH back to your wallet at a fixed 1:1 rate, with no slippage and no market involved. The WETH contract, deployed once and reused across the ecosystem, keeps a reserve of ETH equal to the WETH supply, so every unwrap call simply moves ETH out of that reserve to you. You can view the contract and its reserve directly on <a href="https://etherscan.io/token/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2" rel="nofollow noopener" target="_blank">Etherscan</a>, where the ETH balance held by the contract matches the total WETH in circulation.<h3>The withdraw() function</h3>Calling withdraw(amount) on the WETH contract is the only way to unwrap on-chain. The function checks your balance, subtracts the amount from your WETH holding, and transfers that same amount of native ETH to your address in one transaction. There is no separate approval step because you are not interacting with another contract — you are calling withdraw() directly on the token you already hold.<h3>Why WETH needs a 1:1 reserve</h3>Every WETH token in existence is backed by an equal amount of ETH locked in the contract when someone wrapped it. Unwrapping simply claims that backing back, which is why the exchange rate never drifts: WETH cannot trade below or above the ETH it represents at the contract level, whatever price a market might quote elsewhere.</div></section>
-<section class="c591c50"><h2 class="c6859f4">Why You Need to Unwrap WETH</h2><div class="c15710e">This becomes necessary any time an action needs native ETH rather than its token form. Gas on Ethereum and most of its rollups is paid in native ETH only — a wallet holding nothing but WETH cannot pay for its own transactions, even one that would unwrap that very WETH, so a small ETH balance always has to come from somewhere else first. Certain applications also require native ETH specifically: some NFT mints, some lending protocols' native deposit paths, and most wallets' display of your spendable balance expect ETH, not an ERC-20 standing in for it. If you received WETH from a swap, a liquidity withdrawal, or a bridge, and your next step is paying gas, sending ETH to someone, or using an app that only accepts the native asset, unwrapping is the step that gets you there.<h3>Gas is always paid in native ETH</h3>Transaction fees on Ethereum are deducted in ETH at the protocol level, not at the application level, so no token — including WETH — can ever substitute for it. This base-layer rule is described in <a href="https://ethereum.org/en/developers/docs/gas/" rel="nofollow noopener" target="_blank">Ethereum's own documentation</a>, and it is the single most common reason to go through this step.<h3>Apps that reject WETH</h3>Some contracts are written to accept only the native asset, either for simplicity or because they predate wide adoption of the <a href="https://ethereum.org/en/developers/docs/standards/tokens/erc-20/" rel="nofollow noopener" target="_blank">ERC-20 standard</a>. If a transaction reverts when you try to send WETH where ETH was expected, unwrapping first resolves it.</div></section>
-<section class="c591c50"><h2 class="c6859f4">The 1:1 Rate When You Unwrap WETH</h2><div class="c15710e">Unwrapping WETH never costs you a fee beyond the Ethereum gas for the transaction itself — there is no protocol charge, no spread, and no slippage, because the contract is not trading your WETH, it is redeeming it against its own reserve at an unconditional 1:1 rate. The only variable is gas, which rises and falls with network congestion the same way any other transaction's cost does. The table below separates what you get from what you pay.<table><thead><tr><th>Step</th><th>What you receive</th><th>What you pay</th></tr></thead><tbody><tr><td>Unwrap 1 WETH</td><td>1.0 ETH, no slippage</td><td>Ethereum gas for one transaction</td></tr><tr><td>Unwrap via a wallet</td><td>Same 1:1 rate</td><td>Gas only — no wallet fee</td></tr><tr><td>Unwrap via a DEX interface</td><td>Same 1:1 rate</td><td>Gas, sometimes bundled with another action</td></tr></tbody></table></div></section>
-<section class="c591c50"><h2 class="c6859f4">How to Unwrap WETH, Step by Step</h2><div class="c15710e">The process is short whether you use a wallet's built-in token screen or a DEX interface, and it never involves a trade.<ul><li>Open your wallet or a DEX such as Uniswap and locate your WETH balance.</li><li>Choose the unwrap or convert-to-ETH option, or select WETH as the input on a WETH-to-ETH screen.</li><li>Enter the amount of WETH you want to convert back to ETH.</li><li>Confirm the transaction and pay the Ethereum gas fee — this calls withdraw() on the WETH contract.</li><li>Wait for the transaction to confirm; your native ETH balance updates immediately after.</li></ul><h3>Unwrapping through a wallet</h3>Many wallets show WETH as a listed token with an unwrap or convert action right next to the balance, which calls withdraw() for you without routing through any exchange. This is the simplest path when you hold WETH outright and just want it back as ETH.<h3>Unwrapping through a DEX interface</h3>A DEX such as <a href="https://docs.uniswap.org/" rel="nofollow noopener" target="_blank">Uniswap</a> treats a WETH-to-ETH conversion as a special case: the interface recognizes the pair and calls the WETH contract's withdraw() function directly rather than routing it through a liquidity pool, which is why there is no price impact even on a large amount.</div></section>
-<section class="c591c50"><h2 class="c6859f4">When DeFi Protocols Unwrap WETH for You</h2><div class="c15710e">Some protocols handle this automatically as part of a larger transaction, so you never call withdraw() yourself. A DEX that quotes a trade ending in ETH, a lending market that lets you borrow or repay in ETH, or a liquidity exit that returns the native asset all handle the unwrap step internally and deliver ETH to your wallet at the end. A bundled unwrap costs no extra gas beyond the main transaction, while unwrapping separately first and then doing something else means paying gas twice.</div></section>
-<section class="c591c50"><h2 class="c6859f4">Common Pitfalls When You Unwrap WETH</h2><div class="c15710e">Three mistakes account for most problems people run into. The first is leftover WETH: after a swap or a liquidity withdrawal, a small WETH balance can sit forgotten in a wallet while the person assumes they are holding ETH, which causes a failed transaction when an app needs native ETH specifically. The second is underestimating gas during congestion — unwrapping is cheap relative to a swap, but it is not free, and timing it during a quiet period saves real money, a pattern visible on trackers such as <a href="https://defillama.com/" rel="nofollow noopener" target="_blank">DefiLlama</a>. The third is confusing unwrapping with trading: some interfaces present WETH-to-ETH as a swap screen, so people expect a quoted price to move, when the rate is fixed at 1:1 and the quote shown is only the gas estimate.</div></section>
-<section class="c591c50"><h2 class="c6859f4">After You Unwrap WETH</h2><div class="c15710e">Once the transaction confirms, the ETH is immediately spendable — there is no waiting period and no separate claim step, unlike some bridge withdrawals. From here you can pay gas for other transactions, send the ETH to another address, or deposit it somewhere that requires the native asset. If you expect to need WETH again soon, you can always wrap the same ETH back; the process is symmetric and costs only another round of Ethereum gas. Ethereum itself, described on <a href="https://en.wikipedia.org/wiki/Ethereum" rel="nofollow noopener" target="_blank">Wikipedia</a>, treats native ETH and its wrapped form as two faces of the same asset.</div></section><section class="c591c50 cf077bd" id="cluster"><h2 class="c6859f4">In this cluster</h2><div class="c15710e"><ul><li><a href="/weth-contract-address/">WETH Contract Address</a></li><li><a href="/ethereum-withdrawal-fees/">Ethereum Withdrawal Fees</a></li><li><a href="/ethereum-gas-fees/">Ethereum Gas Fees</a></li></ul></div></section><section class="c591c50 cfb7c42" id="related"><h2 class="c6859f4">Related tools</h2><div class="c15710e"><ul><li><a href="https://trade-wbtc.github.io/">Trade WBTC explained</a></li><li><a href="https://wrap-btc.github.io/">Wrap BTC explained</a></li><li><a href="https://wrapped-eth.github.io/">Wrapped ETH</a></li><li><a href="https://swap-wbtc.github.io/">Swap WBTC</a></li><li><a href="https://trade-weth.github.io/">Trade WETH guide</a></li></ul></div></section><details class="cb2c526"><summary class="c73d19d">What does it mean to unwrap WETH?</summary><div class="c837223">Unwrapping WETH means calling the withdraw() function on the WETH smart contract, which burns your WETH balance and sends you the same amount of native ETH at a fixed 1:1 rate.</div></details>
-<details class="cb2c526"><summary class="c73d19d">Why would I need to unwrap WETH?</summary><div class="c837223">This is needed whenever you want native ETH instead of its token form — most often to pay gas, since transaction fees on Ethereum are only ever paid in ETH, or because an app specifically requires the native asset rather than an ERC-20.</div></details>
-<details class="cb2c526"><summary class="c73d19d">Does unwrapping WETH cost anything besides gas?</summary><div class="c837223">No. The WETH contract redeems your tokens against its own ETH reserve at an unconditional 1:1 rate, so there is no protocol fee and no slippage — the Ethereum gas for the transaction is the only cost.</div></details>
-<details class="cb2c526"><summary class="c73d19d">Can I unwrap WETH in my wallet, or do I need a DEX?</summary><div class="c837223">Either works. Many wallets show an unwrap or convert action directly on the WETH balance, and DEX interfaces such as Uniswap also recognize a WETH-to-ETH conversion and call withdraw() directly instead of routing it through a trading pool.</div></details>
-<details class="cb2c526"><summary class="c73d19d">What happens to leftover WETH after a swap?</summary><div class="c837223">It stays in your wallet as WETH until you unwrap it. A common pitfall is assuming that balance is spendable ETH when an app actually needs the native asset, which causes the transaction to fail until you unwrap first.</div></details>
-<details class="cb2c526"><summary class="c73d19d">Do some protocols unwrap WETH automatically?</summary><div class="c837223">Yes. A trade that ends in ETH, a native-ETH loan repayment, or a liquidity exit that returns ETH often bundles the unwrap step into one transaction, so you never call withdraw() separately and pay no extra gas for it.</div></details>
-<details class="cb2c526"><summary class="c73d19d">Can I wrap the ETH again after unwrapping?</summary><div class="c837223">Yes. Wrapping and unwrapping are fully symmetric and can be repeated as often as you like; each direction only costs the Ethereum gas for that single transaction.</div></details></main>
-<section class="cde4580" id="sources" aria-labelledby="sources-title"><h2 class="c1d219a" id="sources-title">Sources</h2><div><ul class="c11967e"><li><a class="c329079" href="https://etherscan.io/token/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2" rel="nofollow noopener" target="_blank">WETH token contract — Etherscan</a></li>
-<li><a class="c329079" href="https://ethereum.org/en/developers/docs/gas/" rel="nofollow noopener" target="_blank">Ethereum gas documentation</a></li>
-<li><a class="c329079" href="https://docs.uniswap.org/" rel="nofollow noopener" target="_blank">Uniswap developer docs</a></li>
-<li><a class="c329079" href="https://en.wikipedia.org/wiki/Ethereum" rel="nofollow noopener" target="_blank">Ethereum — Wikipedia</a></li></ul></div></section>
-<footer class="c87d44a"><span class="ccaaa2d">Compare with clarity.</span><p class="c55e093">Updated Nov 08, 2026</p></footer>
-</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-cv" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 5 5 5-5"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.4 3 8.4 7 10 4-1.6 7-5.6 7-10V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="i-coins" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="9" cy="7" rx="5" ry="2.5"/><path d="M4 7v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V7"/><path d="M10 15.5c.6 1.2 2.6 2 5 2 2.8 0 5-1.1 5-2.5v-4c0-1.4-2.2-2.5-5-2.5"/><path d="M20 15v4c0 1.4-2.2 2.5-5 2.5s-5-1.1-5-2.5v-2"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/><path d="M12 14.5v2"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+<symbol id="i-drop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s-6 6.4-6 10.5a6 6 0 0 0 12 0c0-4.1-6-10.5-6-10.5z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+<symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/><path d="M8 7.5h.01M8 16.5h.01"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.8 7.8 0 0 0 0-2l2-1.5-2-3.4-2.3 1a7.6 7.6 0 0 0-1.7-1L15 2.5h-4l-.4 2.6c-.6.3-1.2.6-1.7 1l-2.3-1-2 3.4L4.6 11a7.8 7.8 0 0 0 0 2l-2 1.5 2 3.4 2.3-1c.5.4 1.1.7 1.7 1l.4 2.6h4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.3 1 2-3.4z"/></symbol>
+</defs></svg>
+
+<header class="nav">
+  <a class="brand" href="index.html" aria-label="Unwrap WETH home"><img src="icon.svg" alt=""><span>Unwrap WETH</span></a>
+  <nav class="nlinks" aria-label="Primary">
+    <a href="#overview">What it is</a>
+    <a href="#compare">Unwrap vs swap</a>
+    <a href="#how">How to unwrap</a>
+    <a href="#fees">Fees &amp; gas</a>
+    <a href="#security">Security</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <span class="spacer"></span>
+  <a class="chain" href="/dashboard/" style="text-decoration:none"><img src="assets/net-ethereum.svg" alt=""><span>Ethereum</span><svg class="cv" aria-hidden="true"><use href="#i-cv"/></svg></a>
+  <a class="connect" href="/dashboard/" style="text-decoration:none">Connect wallet</a>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Unwrap WETH</h1>
+
+    <section class="card" aria-label="Unwrap WETH">
+      <div class="tabs">
+        <button class="tab on" type="button">Unwrap</button>
+        <button class="tab" type="button">Wrap</button>
+        <span class="sp"></span>
+        <button class="ic gear" type="button" aria-label="Settings" data-toast="Settings are disabled in this demo."><svg aria-hidden="true"><use href="#i-gear"/></svg></button>
+      </div>
+
+      <div class="promo">
+        <div class="promo-txt">
+          <h2 class="promo-h">Turn WETH back into native ETH</h2>
+          <p class="promo-sub">Calls withdraw() on the chain's WETH contract. 1:1, no approval, no slippage, only gas.</p>
+        </div>
+        <div class="promo-grid" aria-hidden="true">
+          <span class="pico"><img src="assets/weth-round.svg" alt=""></span>
+          <span class="pico"><img src="assets/ethereum-eth.svg" alt=""></span>
+          <span class="pico"><img src="assets/net-arbitrum.svg" alt=""></span>
+          <span class="pico"><img src="assets/net-optimism.svg" alt=""></span>
+        </div>
+      </div>
+
+      <div class="cta-wrap"><a class="cta" href="/dashboard/" style="display:flex;align-items:center;justify-content:center;text-decoration:none">Unwrap WETH</a></div>
+    </section>
+  </section>
+
+  <section class="learn" id="learn">
+    <p class="learn-h">Learn about unwrapping WETH</p>
+    <div class="lrow">
+      <details class="lcard" name="learn" id="overview"><summary><span>What it is</span><span class="chev" aria-hidden="true"></span></summary><div class="lbody"><h2>What it means to unwrap WETH</h2>
+<p>To <strong>unwrap WETH</strong> is to turn the ERC-20 token back into the network's native coin. You call withdraw() on the WETH contract with an amount; the contract burns that much WETH from your balance and sends you the same amount of ETH.</p>
+<h3>Why the two exist</h3>
+<p>Native ETH is not an ERC-20 token, so many smart contracts and DEXs cannot handle it directly. WETH is a wrapper that behaves like any other token. Unwrapping is the reverse step, and it is always 1:1.</p>
+<h3>Which chains</h3>
+<p>The interface works on Ethereum and on L2s with a canonical WETH: Arbitrum, Optimism and Base. On each chain it uses that chain's own WETH contract, so check the network in your wallet before you sign.</p>
+<h3>Polygon PoS</h3>
+<p>Be careful here. On Polygon PoS the token called "WETH" is bridged ETH, not a wrapper around a native coin, and it cannot be unwrapped to native ETH or POL with this method. To move it back to Ethereum you need the bridge, which is a different process.</p>
+<h3>When to unwrap</h3>
+<ul>
+<li>You need native ETH to pay gas.</li>
+<li>You are sending to someone who expects ETH, such as an exchange deposit address or a friend.</li>
+<li>An app or contract asks for native ETH rather than WETH.</li>
+</ul></div></details>
+
+      <details class="lcard" name="learn" id="compare"><summary><span>Unwrap vs swap</span><span class="chev" aria-hidden="true"></span></summary><div class="lbody"><h2>Unwrapping vs selling WETH on a DEX</h2>
+<p>Both end with ETH in your wallet, but they work differently. Unwrapping is a contract call at a fixed rate. Selling is a market trade priced by liquidity pools.</p>
+<div class="tbl"><table>
+<caption>Unwrap WETH vs sell WETH for ETH on a DEX</caption>
+<thead><tr><th scope="col"></th><th scope="col">Unwrap</th><th scope="col">Sell on a DEX</th></tr></thead>
+<tbody>
+<tr><th scope="row">Rate</th><td>fixed 1:1</td><td>market price at the time of the trade</td></tr>
+<tr><th scope="row">Slippage</th><td>none</td><td>yes, with price impact</td></tr>
+<tr><th scope="row">Approval</th><td>not needed</td><td>usually a one-time WETH allowance</td></tr>
+<tr><th scope="row">Cost</th><td>gas only</td><td>gas + pool or aggregator fee</td></tr>
+</tbody>
+</table></div>
+<h3>Which to use</h3>
+<p>If the goal is just ETH, unwrapping is the direct route: you receive exactly what you burn. A DEX only makes sense when you want a different token, not when you want the same asset back.</p></div></details>
+
+      <details class="lcard" name="learn" id="how"><summary><span>How to unwrap</span><span class="chev" aria-hidden="true"></span></summary><div class="lbody"><h2>How to unwrap WETH</h2>
+<h3>Step by step</h3>
+<ol>
+<li>Connect your wallet and select the network that holds your WETH: Ethereum, Arbitrum, Optimism or Base.</li>
+<li>Enter the amount of WETH to unwrap, or use your full balance.</li>
+<li>Review the amount you will receive, which equals the amount you enter, and the estimated gas.</li>
+<li>Sign the withdraw() transaction in your wallet. No approval step comes first.</li>
+<li>Wait for confirmation. Your WETH balance drops and your native ETH balance rises by the same amount, minus gas.</li>
+</ol>
+<h3>Keep a little ETH</h3>
+<p>Gas is paid in native ETH, taken from the same wallet. If your wallet holds only WETH, you cannot sign the transaction, so send a small amount of ETH there first.</p></div></details>
+
+      <details class="lcard" name="learn" id="fees"><summary><span>Fees &amp; gas</span><span class="chev" aria-hidden="true"></span></summary><div class="lbody"><h2>What unwrapping WETH costs</h2>
+<h3>Gas only</h3>
+<p>Unwrapping is a single transaction, so the only cost is the network gas fee, paid in native ETH. There is no protocol fee, no pool fee and no spread. See how <a href="https://ethereum.org/en/developers/docs/gas/" target="_blank" rel="nofollow noopener">gas works</a>.</p>
+<h3>No approval, no slippage</h3>
+<p>The WETH contract burns tokens from the caller's own balance, so no allowance transaction is required. The rate is fixed, which means slippage and price impact do not apply.</p>
+<h3>Gas varies by chain</h3>
+<p>Gas is usually higher on Ethereum mainnet than on L2s such as Arbitrum, Optimism and Base, and it moves with network demand. Your wallet shows the estimate before you sign.</p></div></details>
+
+      <details class="lcard" name="learn" id="security"><summary><span>Security</span><span class="chev" aria-hidden="true"></span></summary><div class="lbody"><h2>Staying safe when you unwrap</h2>
+<h3>Non-custodial by design</h3>
+<p>You connect your own wallet and sign every transaction yourself. The interface prepares the call; it never holds your funds or keys.</p>
+<h3>Before you sign</h3>
+<ul>
+<li>Check that the network in your wallet matches the chain you intend to use.</li>
+<li>Verify the WETH contract address for that chain against the chain's official docs; lookalike tokens exist.</li>
+<li>Confirm the transaction is a withdraw call for the amount you entered and sends nothing else.</li>
+<li>Smart contracts can contain bugs, so risk is never zero, even for widely used ones.</li>
+</ul></div></details>
+
+      <details class="lcard" name="learn" id="faq"><summary><span>FAQ</span><span class="chev" aria-hidden="true"></span></summary><div class="lbody lfaq"><h2>Unwrap WETH FAQ</h2>
+<h3>How do I unwrap WETH to ETH?</h3>
+<p>Connect your wallet, pick the network, enter an amount and sign a call to withdraw() on that chain's WETH contract. The contract burns your WETH and sends back the same amount of native ETH.</p>
+<h3>Is unwrapping WETH always 1:1?</h3>
+<p>Yes. The WETH contract returns exactly the amount of ETH that corresponds to the WETH it burns. You only lose the gas fee for the transaction.</p>
+<h3>Do I need to approve WETH before unwrapping?</h3>
+<p>No. withdraw() burns WETH from the caller's own balance, so no allowance is needed. That is one fewer transaction than a DEX sale, which usually requires an approval first.</p>
+<h3>Which networks can I unwrap WETH on?</h3>
+<p>Ethereum, Arbitrum, Optimism and Base, each using its own canonical WETH contract. Make sure your wallet is on the network that holds your WETH.</p>
+<h3>Can I unwrap WETH on Polygon PoS?</h3>
+<p>Not with this method. The WETH on Polygon PoS is bridged ETH, not a wrapper with a withdraw() that returns native ETH or POL. To get ETH you would bridge it back to Ethereum.</p>
+<h3>Is it cheaper to unwrap WETH or sell it on a DEX?</h3>
+<p>Unwrapping, in most cases. It costs gas only, while a DEX sale adds gas for a possible approval, a pool or aggregator fee, and slippage. Both can end with ETH in your wallet, but only unwrapping is a fixed 1:1 exchange.</p></div></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot"><span>&copy; 2026 Unwrap WETH</span><span class="sep">&middot;</span><a href="legal.html#privacy">Privacy</a><span class="sep">&middot;</span><a href="legal.html#terms">Terms</a><span class="sep">&middot;</span><span>Non-custodial &middot; Unwrap WETH to ETH</span></div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
-(() => {
-  const amount = document.getElementById('amount');
-  const received = document.getElementById('received');
-  const fee = document.getElementById('fee');
-  const time = document.getElementById('time');
-  const error = document.getElementById('amount-error');
-  const number = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  let timer;
-  function update() {
-    const value = amount.valueAsNumber;
-    const valid = amount.value.trim() !== '' && Number.isFinite(value) && amount.validity.valid;
-    amount.setAttribute('aria-invalid', String(!valid));
-    error.hidden = valid;
-    error.textContent = valid ? '' : 'Enter an amount from 1 to 1,000,000,000 with up to 2 decimal places.';
-    if (!valid) {
-      received.textContent = '—';
-      fee.textContent = '—';
-      time.textContent = '—';
-      return;
-    }
-    const amountCents = Math.round(value * 100);
-    const feeCents = 50 + Math.round(amountCents * 35 / 10000);
-    received.textContent = number.format((amountCents - feeCents) / 100) + ' units';
-    fee.textContent = number.format(feeCents / 100) + ' units';
-    time.textContent = (2 + Math.ceil(value / 10000)).toLocaleString('en-US') + ' min';
-  }
-  amount.addEventListener('input', () => {
-    clearTimeout(timer);
-    timer = setTimeout(update, 180);
-  });
-  amount.addEventListener('change', () => {
-    clearTimeout(timer);
-    update();
-  });
-  update();
+(function(){
+"use strict";
+var tabs=[].slice.call(document.querySelectorAll('.tab'));
+tabs.forEach(function(t){t.addEventListener('click',function(){tabs.forEach(function(x){x.classList.toggle('on',x===t);});});});
+
+var toast=document.getElementById('toast'),tT;
+function notify(m){toast.textContent=m;toast.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){toast.classList.remove('show');},3000);}
+[].slice.call(document.querySelectorAll('[data-toast]')).forEach(function(b){b.addEventListener('click',function(){notify(b.getAttribute('data-toast'));});});
+
+function openHash(){var id=location.hash.slice(1);if(!id)return;var c=document.getElementById(id);if(c&&c.matches&&c.matches('.lcard[name="learn"]'))c.open=true;}
+window.addEventListener('hashchange',openHash);openHash();
+[].slice.call(document.querySelectorAll('.nlinks a')).forEach(function(a){a.addEventListener('click',function(){var c=document.getElementById(a.getAttribute('href').slice(1));if(c&&c.matches('.lcard'))c.open=true;});});
 })();
 </script>
-</body>
-</html>
+</body></html>

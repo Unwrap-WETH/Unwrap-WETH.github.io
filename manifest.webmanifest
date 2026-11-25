@@ -1,0 +1,1 @@
+{"name":"Unwrap WETH","short_name":"Unwrap WETH","description":"Unwrap WETH to native ETH 1:1 with withdraw() on the canonical WETH contract. Non-custodial, no approval, no slippage, gas only. Ethereum, Arbitrum, OP, Base.","start_url":"/","display":"standalone","background_color":"#f4f5f7","theme_color":"#f4f5f7","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}
